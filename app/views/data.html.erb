@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hello World</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="stylesheets/application.css">
+	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script src="http://code.highcharts.com/highcharts.js"></script>
+</head>
+<body>
+
+<div class="container">
+		
+	<div class="search">
+		<input type = "text" class = "form-control" id="search-box">
+		<button class="btn btn-primary" id="search-btn">Search</button>
+
+
+	</div>	
+
+	<div class="info">
+
+		
+		<div class="name"> <%= name %> </div>
+		
+		<div class="symbol"> <%= symbol %> </div>
+
+
+	</div>
+
+
+	<div id="graph"></div>
+
+
+</div>
+
+
+<script type="text/javascript">
+	
+$(document).ready(function() {
+
+	var data = <%= data %>;
+
+	for (i = 0; i < data.length; i++) {
+		var day = data[i][0][0];
+		var month = data[i][0][1];
+		var year = data[i][0][2];
+
+		data[i][0] = Date.UTC(year, month, day);
+		//over ride array with one value
+	}
+
+	$("#graph").highcharts({
+		chart: {
+			zoomType: 'x',
+			type: 'spline'
+
+		},
+		title: {
+			text: "<%= name %> Historical Data"
+		},
+		xAxis: {
+			title: {
+				text: "Date"
+			},
+			type: 'datetime'
+		},
+		yAxis: {
+			title: {
+				text: "Price"
+			}
+		},
+		series: [{
+			name: "<%= name %>",
+			data: data
+		}]
+	});
+});
+
+$('#search-btn').click(function() {
+	var value = $("#search-box").val();
+	$(location).attr('href','/data/'+value);
+});
+
+
+</script>
+
+
+
+
+
+</body>
+</html>
